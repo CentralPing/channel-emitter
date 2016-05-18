@@ -1,0 +1,42 @@
+{
+  "name": "channel-emitter",
+  "version": "0.1.0",
+  "description": "An event emitter with broadcast and broadcast support",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "faker": "^3.0.1",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-debug": "^2.1.2",
+    "gulp-if": "^2.0.0",
+    "gulp-jsdoc-to-markdown": "^1.2.2",
+    "gulp-jshint": "^2.0.0",
+    "gulp-mocha": "^2.1.3",
+    "gulp-todo": "^4.0.0",
+    "gulp-util": "^3.0.7",
+    "jshint": "^2.9.2",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0",
+    "yargs": "^4.6.0"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "docs": "jsdoc2md lib/*.js > api.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CentralPing/channel-emitter"
+  },
+  "keywords": [
+    "emitter",
+    "broadcast"
+  ],
+  "author": "Jason Cust <jason@centralping.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/CentralPing/channel-emitter/issues"
+  },
+  "homepage": "https://github.com/CentralPing/channel-emitter"
+}
