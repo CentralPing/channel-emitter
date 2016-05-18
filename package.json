@@ -1,7 +1,7 @@
 {
   "name": "channel-emitter",
   "version": "0.1.0",
-  "description": "An event emitter with broadcast and broadcast support",
+  "description": "An event emitter with channel and broadcast support",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "test": "gulp test",
-    "docs": "jsdoc2md lib/*.js > api.md"
+    "prepublish": "npm test && gulp docs"
   },
   "repository": {
     "type": "git",
