@@ -65,10 +65,9 @@ gulp.task('watch', ['test'], function () {
 gulp.task('todo', function () {
   return gulp.src(config.paths.all)
     .pipe(todo({
-      //fileName: 'todo.md',
-      verbose: isVerbose,
-      //newLine: gutil.linefeed,
       /*
+      fileName: 'todo.md',
+      newLine: gutil.linefeed,
       transformComment: function (file, line, text) {
           return ['| ' + file + ' | ' + line + ' | ' + text];
       },
@@ -79,6 +78,7 @@ gulp.task('todo', function () {
           ];
       }
       */
+      verbose: isVerbose
     }))
     .pipe(gulp.dest('./'));
 });
