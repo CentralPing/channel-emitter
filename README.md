@@ -17,7 +17,7 @@ var channel_emitter = require('channel-emitter');
 ```
 <a name="module_channel-emitter..addListener"></a>
 
-### channel-emitter~addListener(name, listener) ⇒ <code>ChannelEmitter</code>
+### channel-emitter~addListener(eventName, listener) ⇒ <code>ChannelEmitter</code>
 Wrapper for the `EventEmitter.addListener` method that will auto-add channels
  if the specified delimiter is used in the name.
 
@@ -25,12 +25,12 @@ Wrapper for the `EventEmitter.addListener` method that will auto-add channels
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | the name for the event |
+| eventName | <code>string</code> | the name for the event |
 | listener | <code>function</code> | the listener for the event |
 
 <a name="module_channel-emitter..removeListener"></a>
 
-### channel-emitter~removeListener(name, listener) ⇒ <code>ChannelEmitter</code>
+### channel-emitter~removeListener(eventName, listener) ⇒ <code>ChannelEmitter</code>
 Wrapper for the `EventEmitter.removeListener` method that will auto-remove channels
  if the specified delimiter is used in the name.
 
@@ -38,12 +38,12 @@ Wrapper for the `EventEmitter.removeListener` method that will auto-remove chann
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | the name for the event |
+| eventName | <code>string</code> | the name for the event |
 | listener | <code>function</code> | the listener for the event |
 
 <a name="module_channel-emitter..on"></a>
 
-### channel-emitter~on(name, listener) ⇒ <code>ChannelEmitter</code>
+### channel-emitter~on(eventName, listener) ⇒ <code>ChannelEmitter</code>
 Wrapper for the `EventEmitter.on` method that will auto-add channels
  if the specified delimiter is used in the name.
 
@@ -51,30 +51,30 @@ Wrapper for the `EventEmitter.on` method that will auto-add channels
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | the name for the event |
+| eventName | <code>string</code> | the name for the event |
 | listener | <code>function</code> | the listener for the event |
 
 <a name="module_channel-emitter..addChannel"></a>
 
-### channel-emitter~addChannel(name) ⇒ <code>ChannelEmitter</code>
+### channel-emitter~addChannel(channelName) ⇒ <code>ChannelEmitter</code>
 Adds a sub-channel to the current channel.
 
 **Kind**: inner method of <code>[channel-emitter](#module_channel-emitter)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | the name for the channel |
+| channelName | <code>string</code> | the name for the channel |
 
 <a name="module_channel-emitter..removeChannel"></a>
 
-### channel-emitter~removeChannel(name) ⇒ <code>ChannelEmitter</code>
+### channel-emitter~removeChannel(channelName) ⇒ <code>ChannelEmitter</code>
 Removes the sub-channel from the current channel.
 
 **Kind**: inner method of <code>[channel-emitter](#module_channel-emitter)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | the name for the channel |
+| channelName | <code>string</code> | the name for the channel |
 
 <a name="module_channel-emitter..emit"></a>
 

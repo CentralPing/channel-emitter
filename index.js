@@ -4,6 +4,8 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var Emitter;
 
+var rootChar = '^';
+var rootCharRegexp = /^\^/;
 var nameDelim = '.';
 var nameDelimRegexp = /\./;
 
@@ -34,23 +36,19 @@ Emitter = module.exports = new ChannelEmitter();
 * @function addListener
 * @desc Wrapper for the `EventEmitter.addListener` method that will auto-add channels
 *  if the specified delimiter is used in the name.
-* @param {string} name - the name for the event
+* @param {string} eventName - the name for the event
 * @param {function} listener - the listener for the event
 * @return {ChannelEmitter}
 */
 function addListener(eventName, listener) {
-  var channelAndEventName = addChannelsFromEventName(this, eventName);
-
-  channelAndEventName.channel._addListener(channelAndEventName.eventName, listener);
-
-  return this;
+  return onOrAddListener(this, '_addListener', eventName, listener);
 }
 
 /**
 * @function removeListener
 * @desc Wrapper for the `EventEmitter.removeListener` method that will auto-remove channels
 *  if the specified delimiter is used in the name.
-* @param {string} name - the name for the event
+* @param {string} eventName - the name for the event
 * @param {function} listener - the listener for the event
 * @return {ChannelEmitter}
 */
@@ -68,29 +66,24 @@ function removeListener(eventName, listener) {
 * @function on
 * @desc Wrapper for the `EventEmitter.on` method that will auto-add channels
 *  if the specified delimiter is used in the name.
-* @param {string} name - the name for the event
+* @param {string} eventName - the name for the event
 * @param {function} listener - the listener for the event
 * @return {ChannelEmitter}
 */
 function on(eventName, listener) {
-  var channelAndEventName = addChannelsFromEventName(this, eventName);
-
-  channelAndEventName.channel._on(channelAndEventName.eventName, listener);
-
-  // Return the original emitter for expected chaining
-  return this;
+  return onOrAddListener(this, '_on', eventName, listener);
 }
 
 /**
 * @function addChannel
 * @desc Adds a sub-channel to the current channel.
-* @param {string} name - the name for the channel
+* @param {string} channelName - the name for the channel
 * @return {ChannelEmitter}
 */
-function addChannel(name) {
-  if (name && this[name] === undefined) {
-    this[name] = new ChannelEmitter(this);
-    this._channels.push(name);
+function addChannel(channelName) {
+  if (channelName && this[channelName] === undefined) {
+    this[channelName] = new ChannelEmitter(this);
+    this._channels.push(channelName);
   }
 
   return this;
@@ -99,15 +92,15 @@ function addChannel(name) {
 /**
 * @function removeChannel
 * @desc Removes the sub-channel from the current channel.
-* @param {string} name - the name for the channel
+* @param {string} channelName - the name for the channel
 * @return {ChannelEmitter}
 */
-function removeChannel(name) {
-  var index = this._channels.indexOf(name);
+function removeChannel(channelName) {
+  var index = this._channels.indexOf(channelName);
 
   if (index > -1) {
     this._channels.splice(index, 1);
-    delete this[name];
+    delete this[channelName];
   }
 
   return this;
@@ -186,6 +179,20 @@ function ChannelEmitter(parent) {
 /*****************/
 
 function addChannelsFromEventName(curChannel, eventName) {
+  return processChannelsFromEventName(curChannel, eventName, function (cur, channel) {
+    cur.addChannel(channel);
+
+    return cur[channel];
+  });
+}
+
+function getChannelAndEventName(curChannel, eventName) {
+  return processChannelsFromEventName(curChannel, eventName, function (cur, channel) {
+    return cur && cur[channel];
+  });
+}
+
+function processChannelsFromEventName(curChannel, eventName, reduceFn) {
   var channels;
 
   if (nameDelimRegexp.test(eventName)) {
@@ -193,7 +200,7 @@ function addChannelsFromEventName(curChannel, eventName) {
     eventName = channels.pop();
 
     // Start from root if eventName begins with a '^''
-    if (/^\^/.test(channels[0])) {
+    if (rootCharRegexp.test(channels[0])) {
       channels[0] = channels[0].slice(1);
 
       while (curChannel._parent) {
@@ -201,38 +208,18 @@ function addChannelsFromEventName(curChannel, eventName) {
       }
     }
 
-    curChannel = channels.reduce(function (cur, channel) {
-      cur.addChannel(channel);
-
-      return cur[channel];
-    }, curChannel);
+    curChannel = channels.reduce(reduceFn, curChannel);
   }
 
   return { channel: curChannel, eventName: eventName};
 }
 
-function getChannelAndEventName(curChannel, eventName) {
-  var channels;
+function onOrAddListener(channel, method, eventName, listener) {
+  var channelAndEventName = addChannelsFromEventName(channel, eventName);
 
-  if (nameDelimRegexp.test(eventName)) {
-    channels = eventName.split(nameDelim);
-    eventName = channels.pop();
+  channelAndEventName.channel[method](channelAndEventName.eventName, listener);
 
-    // Start from root if eventName begins with a '^''
-    if (/^\^/.test(channels[0])) {
-      channels[0] = channels[0].slice(1);
-
-      while (curChannel._parent) {
-        curChannel = curChannel._parent;
-      }
-    }
-
-    curChannel = channels.reduce(function (cur, channel) {
-      return cur && cur[channel];
-    }, curChannel);
-  }
-
-  return { channel: curChannel, eventName: eventName};
+  return channel;
 }
 
 function removeIfChannelEmpty(channel) {
