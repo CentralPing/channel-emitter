@@ -31,27 +31,12 @@ ChannelEmitter.prototype.removeChannel = removeChannel;
 Emitter = module.exports = new ChannelEmitter();
 
 /**
-* @constructor ChannelEmitter
-* @param {EventEmitter} parent - the parent event emittier
-* @return {EventEmitter}
-*/
-function ChannelEmitter(parent) {
-  EventEmitter.call(this);
-
-  this._channels = [];
-
-  if (parent) {
-    this._parent = parent;
-  }
-}
-
-/**
 * @function addListener
 * @desc Wrapper for the `EventEmitter.addListener` method that will auto-add channels
 *  if the specified delimiter is used in the name.
-* @param {string} [channels]name - the name for the event
+* @param {string} name - the name for the event
 * @param {function} listener - the listener for the event
-* @return {EventEmitter}
+* @return {ChannelEmitter}
 */
 function addListener(eventName, listener) {
   var channelAndEventName = addChannelsFromEventName(this, eventName);
@@ -65,9 +50,9 @@ function addListener(eventName, listener) {
 * @function removeListener
 * @desc Wrapper for the `EventEmitter.removeListener` method that will auto-remove channels
 *  if the specified delimiter is used in the name.
-* @param {string} [channels]name - the name for the event
+* @param {string} name - the name for the event
 * @param {function} listener - the listener for the event
-* @return {EventEmitter}
+* @return {ChannelEmitter}
 */
 function removeListener(eventName, listener) {
   var channelAndEventName = getChannelAndEventName(this, eventName);
@@ -83,9 +68,9 @@ function removeListener(eventName, listener) {
 * @function on
 * @desc Wrapper for the `EventEmitter.on` method that will auto-add channels
 *  if the specified delimiter is used in the name.
-* @param {string} [channels]name - the name for the event
+* @param {string} name - the name for the event
 * @param {function} listener - the listener for the event
-* @return {EventEmitter}
+* @return {ChannelEmitter}
 */
 function on(eventName, listener) {
   var channelAndEventName = addChannelsFromEventName(this, eventName);
@@ -100,7 +85,7 @@ function on(eventName, listener) {
 * @function addChannel
 * @desc Adds a sub-channel to the current channel.
 * @param {string} name - the name for the channel
-* @return {EventEmitter}
+* @return {ChannelEmitter}
 */
 function addChannel(name) {
   if (name && this[name] === undefined) {
@@ -115,7 +100,7 @@ function addChannel(name) {
 * @function removeChannel
 * @desc Removes the sub-channel from the current channel.
 * @param {string} name - the name for the channel
-* @return {Boolean}
+* @return {ChannelEmitter}
 */
 function removeChannel(name) {
   var index = this._channels.indexOf(name);
@@ -181,6 +166,19 @@ function broadcast() {
   }
 
   return emittedOnChannel || emittedToSubChannels;
+}
+
+/*****************/
+// Constructor function
+/*****************/
+function ChannelEmitter(parent) {
+  EventEmitter.call(this);
+
+  this._channels = [];
+
+  if (parent) {
+    this._parent = parent;
+  }
 }
 
 /*****************/
