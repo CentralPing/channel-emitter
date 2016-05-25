@@ -12,6 +12,7 @@ var mocha = require('gulp-mocha');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
 var jsdoc2md = require('gulp-jsdoc-to-markdown');
+var istanbul = require('gulp-istanbul');
 
 var isDebug = !!args.debug;
 var isVerbose = !!args.verbose;
@@ -20,9 +21,9 @@ var cliSrc = args.files;
 
 var config = {
   paths: {
-    scripts: ['./**/*.js', '!./**/*.spec.js', '!./node_modules/**/*.js', '!gulpfile.js'],
-    specs: ['./**/*.spec.js', '!./node_modules/**/*.js'],
-    all: ['./**/*.js', '!./node_modules/**/*.js', '!gulpfile.js']
+    scripts: ['./**/*.js', '!./**/*.spec.js', '!./node_modules/**/*.js', '!./coverage/**/*.js', '!gulpfile.js'],
+    specs: ['./**/*.spec.js', '!./node_modules/**/*.js', '!./coverage/**/*.js', '!gulpfile.js'],
+    all: ['./**/*.js', '!./node_modules/**/*.js', '!./coverage/**/*.js', '!gulpfile.js']
   }
 };
 
@@ -50,6 +51,24 @@ gulp.task('lint:spec', function () {
 
 gulp.task('test', ['lint'], function () {
   return testRunner(cliSrc || config.paths.specs);
+});
+
+gulp.task('pre-coverage', function () {
+  return gulp.src(cliSrc || config.paths.all)
+  // Covering files
+  .pipe(istanbul())
+  // Force `require` to return covered files
+  .pipe(istanbul.hookRequire());
+});
+
+gulp.task('coverage', ['pre-coverage', 'test'], function () {
+  return gulp.src(cliSrc || config.paths.specs)
+    // Creating the reports after tests ran
+    .pipe(istanbul.writeReports())
+    // Enforce a coverage of at least 90%
+    .pipe(istanbul.enforceThresholds({
+      thresholds: { global: 90 }
+    }));
 });
 
 gulp.task('watch', ['test'], function () {
