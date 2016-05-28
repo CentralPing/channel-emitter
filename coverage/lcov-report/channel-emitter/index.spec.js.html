@@ -1,0 +1,1745 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for channel-emitter/index.spec.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">channel-emitter/</a> index.spec.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>354/354</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>69/69</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>354/354</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* jshint node: true, mocha: true, expr: true */
+&nbsp;
+var faker = require('faker');
+var chai = require('chai');
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
+var expect = chai.expect;
+&nbsp;
+var channelEmitter = require('./');
+var EventEmitter = require('events').EventEmitter;
+&nbsp;
+chai.use(sinonChai);
+&nbsp;
+describe('Module: channel-emitter', function () {
+  it('should be an instance of EventEmitter', function () {
+    expect(channelEmitter).to.be.an.instanceof(EventEmitter);
+  });
+&nbsp;
+  it('should have a method `addChannel`', function () {
+    expect(channelEmitter).to.have.property('addChannel').that.is.a('function');
+  });
+&nbsp;
+  it('should have a method `removeChannel`', function () {
+    expect(channelEmitter).to.have.property('removeChannel').that.is.a('function');
+  });
+&nbsp;
+  it('should have a method `broadcast`', function () {
+    expect(channelEmitter).to.have.property('broadcast').that.is.a('function');
+  });
+&nbsp;
+  it('should not add an undefined channel', function () {
+    expect(channelEmitter.addChannel()).to.be.an.instanceof(EventEmitter);
+  });
+&nbsp;
+  it('should add a channel', function () {
+    expect(channelEmitter.addChannel('RemoveMe')).to.be.an.instanceof(EventEmitter);
+    expect(channelEmitter).to.have.property('RemoveMe').that.is.an.instanceof(EventEmitter);
+  });
+&nbsp;
+  it('should not remove an undefined channel', function () {
+    expect(channelEmitter.removeChannel()).to.be.an.instanceof(EventEmitter);
+  });
+&nbsp;
+  it('should remove a channel', function () {
+    expect(channelEmitter.removeChannel('RemoveMe')).to.be.an.instanceof(EventEmitter);
+    expect(channelEmitter).not.to.have.property('RemoveMe');
+  });
+&nbsp;
+  describe('with instance', function () {
+    var spyRootOn;
+    var spyRootAddListener;
+    var spyForEmit;
+    var spyForBroadcast;
+&nbsp;
+    before(function () {
+      spyRootOn = sinon.spy();
+      spyRootAddListener = sinon.spy();
+      spyForEmit = sinon.spy(channelEmitter, 'emit');
+      spyForBroadcast = sinon.spy(channelEmitter, 'broadcast');
+      channelEmitter.on('rootOn', spyRootOn);
+      expect(channelEmitter.listenerCount('rootOn')).to.equal(1);
+      channelEmitter.addListener('rootAddListner', spyRootAddListener);
+      expect(channelEmitter.listenerCount('rootAddListner')).to.equal(1);
+    });
+&nbsp;
+    afterEach(function () {
+      spyRootOn.reset();
+      spyRootAddListener.reset();
+      spyForEmit.reset();
+      spyForBroadcast.reset();
+    });
+&nbsp;
+    describe('with `on`', function () {
+      it('should emit on the current channel', function () {
+        expect(channelEmitter.emit('rootOn', true)).to.be.true;
+        expect(spyRootOn).to.have.been.calledOnce;
+        expect(spyRootOn).to.have.been.calledWithExactly(true);
+&nbsp;
+        expect(spyForEmit).to.have.been.calledOnce;
+        expect(spyForEmit).to.have.been.calledWithExactly('rootOn', true);
+&nbsp;
+        expect(spyForBroadcast).not.to.have.been.called;
+        expect(spyRootAddListener).not.to.have.been.called;
+      });
+&nbsp;
+      it('should broadcast on the current channel', function () {
+        expect(channelEmitter.broadcast('rootOn', true)).to.be.true;
+        expect(spyRootOn).to.have.been.calledOnce;
+        expect(spyRootOn).to.have.been.calledWithExactly(true);
+&nbsp;
+        expect(spyForBroadcast).to.have.been.calledOnce;
+        expect(spyForBroadcast).to.have.been.calledWithExactly('rootOn', true);
+&nbsp;
+        expect(spyForEmit).not.to.have.been.called;
+        expect(spyRootAddListener).not.to.have.been.called;
+      });
+    });
+&nbsp;
+    describe('with `addListener`', function () {
+      it('should emit on the current channel', function () {
+        expect(channelEmitter.emit('rootAddListner', true)).to.be.true;
+        expect(spyRootAddListener).to.have.been.calledOnce;
+        expect(spyRootAddListener).to.have.been.calledWithExactly(true);
+&nbsp;
+        expect(spyForEmit).to.have.been.calledOnce;
+        expect(spyForEmit).to.have.been.calledWithExactly('rootAddListner', true);
+&nbsp;
+        expect(spyForBroadcast).not.to.have.been.called;
+        expect(spyRootOn).not.to.have.been.called;
+      });
+&nbsp;
+      it('should broadcast on the current channel', function () {
+        expect(channelEmitter.broadcast('rootAddListner', true)).to.be.true;
+        expect(spyRootAddListener).to.have.been.calledOnce;
+        expect(spyRootAddListener).to.have.been.calledWithExactly(true);
+&nbsp;
+        expect(spyForBroadcast).to.have.been.calledOnce;
+        expect(spyForBroadcast).to.have.been.calledWithExactly('rootAddListner', true);
+&nbsp;
+        expect(spyForEmit).not.to.have.been.called;
+        expect(spyRootOn).not.to.have.been.called;
+      });
+    });
+&nbsp;
+    describe('with `removeListener`', function () {
+      var spyRemoveMeListener;
+&nbsp;
+      before(function () {
+        spyRemoveMeListener = sinon.spy();
+      });
+&nbsp;
+      beforeEach(function () {
+        channelEmitter.addListener('removeMe', spyRemoveMeListener);
+        expect(channelEmitter.listenerCount('removeMe')).to.equal(1);
+      });
+&nbsp;
+      afterEach(function () {
+        spyRemoveMeListener.reset();
+      });
+&nbsp;
+      it('should not have a listener for an emit', function () {
+        expect(channelEmitter.removeListener('removeMe', spyRemoveMeListener)).to.be.an.instanceof(EventEmitter);
+        expect(channelEmitter.listenerCount('removeMe')).to.equal(0);
+&nbsp;
+        expect(channelEmitter.emit('removeMe', true)).to.be.false;
+        expect(spyRemoveMeListener).not.to.have.been.called;
+      });
+&nbsp;
+      it('should not have a listener for a broadcast', function () {
+        expect(channelEmitter.removeListener('removeMe', spyRemoveMeListener)).to.be.an.instanceof(EventEmitter);
+        expect(channelEmitter.listenerCount('removeMe')).to.equal(0);
+&nbsp;
+        expect(channelEmitter.broadcast('removeMe', true)).to.be.false;
+        expect(spyRemoveMeListener).not.to.have.been.called;
+      });
+&nbsp;
+      it('should not remove listener if wrong channel specified', function () {
+        expect(channelEmitter.removeListener('foo.removeMe', spyRemoveMeListener)).to.be.an.instanceof(EventEmitter);
+        expect(channelEmitter.listenerCount('removeMe')).to.equal(1);
+&nbsp;
+        expect(channelEmitter.emit('removeMe', true)).to.be.true;
+        expect(spyRemoveMeListener).to.have.been.calledOnce;
+      });
+    });
+&nbsp;
+    describe('with `once`', function () {
+      var spyOnceListener;
+&nbsp;
+      before(function () {
+        spyOnceListener = sinon.spy();
+      });
+&nbsp;
+      beforeEach(function () {
+        channelEmitter.once('once', spyOnceListener);
+        expect(channelEmitter.listenerCount('once')).to.equal(1);
+      });
+&nbsp;
+      afterEach(function () {
+        spyOnceListener.reset();
+      });
+&nbsp;
+      it('should emit once and be removed', function () {
+        expect(channelEmitter.emit('once', true)).to.be.true;
+        expect(channelEmitter.listenerCount('once')).to.equal(0);
+&nbsp;
+        expect(channelEmitter.emit('once', true)).to.be.false;
+&nbsp;
+        expect(spyOnceListener).to.have.been.calledOnce;
+        expect(spyOnceListener.firstCall).to.have.been.calledWithExactly(true);
+      });
+&nbsp;
+      it('should broadcast once and be removed', function () {
+        expect(channelEmitter.broadcast('once', true)).to.be.true;
+        expect(channelEmitter.listenerCount('once')).to.equal(0);
+&nbsp;
+        expect(channelEmitter.broadcast('once', true)).to.be.false;
+&nbsp;
+        expect(spyOnceListener).to.have.been.calledOnce;
+        expect(spyOnceListener.firstCall).to.have.been.calledWithExactly(true);
+      });
+    });
+&nbsp;
+    describe('with channels (descendents)', function () {
+      var spyForSubA;
+      var spyForSubAEmit;
+      var spyForSubABroadcast;
+      var spyForSubB;
+      var spyForSubBEmit;
+      var spyForSubBBroadcast;
+      var spyForSubASubA;
+      var spyForSubASubAEmit;
+      var spyForSubASubABroadcast;
+&nbsp;
+      before(function () {
+        spyForSubA = sinon.spy();
+        channelEmitter.addChannel('SubA');
+        channelEmitter.SubA.on('subA', spyForSubA);
+        spyForSubAEmit = sinon.spy(channelEmitter.SubA, 'emit');
+        spyForSubABroadcast = sinon.spy(channelEmitter.SubA, 'broadcast');
+        expect(channelEmitter.SubA.listenerCount('subA')).to.equal(1);
+&nbsp;
+        spyForSubB = sinon.spy();
+        channelEmitter.addChannel('SubB');
+        channelEmitter.SubB.on('subB', spyForSubB);
+        spyForSubBEmit = sinon.spy(channelEmitter.SubB, 'emit');
+        spyForSubBBroadcast = sinon.spy(channelEmitter.SubB, 'broadcast');
+        expect(channelEmitter.SubB.listenerCount('subB')).to.equal(1);
+&nbsp;
+        spyForSubASubA = sinon.spy();
+        channelEmitter.SubA.addChannel('SubA');
+        channelEmitter.SubA.SubA.on('subAsubA', spyForSubASubA);
+        spyForSubASubAEmit = sinon.spy(channelEmitter.SubA.SubA, 'emit');
+        spyForSubASubABroadcast = sinon.spy(channelEmitter.SubA.SubA, 'broadcast');
+        expect(channelEmitter.SubA.SubA.listenerCount('subAsubA')).to.equal(1);
+      });
+&nbsp;
+      afterEach(function () {
+        spyForSubA.reset();
+        spyForSubAEmit.reset();
+        spyForSubABroadcast.reset();
+        spyForSubB.reset();
+        spyForSubBEmit.reset();
+        spyForSubBBroadcast.reset();
+        spyForSubASubA.reset();
+        spyForSubASubAEmit.reset();
+        spyForSubASubABroadcast.reset();
+      });
+&nbsp;
+      it('should be an instance of EventEmitter', function () {
+        expect(channelEmitter.SubA).to.be.an.instanceof(EventEmitter);
+        expect(channelEmitter.SubA.SubA).to.be.an.instanceof(EventEmitter);
+      });
+&nbsp;
+      it('should emit to direct ancestor channels', function () {
+        expect(channelEmitter.SubA.SubA.emit('rootOn', true)).to.be.true;
+        expect(spyForSubAEmit).to.have.been.calledOnce;
+        expect(spyForSubAEmit).to.have.been.calledWithExactly('rootOn', true);
+        expect(spyForSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForEmit).to.have.been.calledOnce;
+        expect(spyForEmit).to.have.been.calledWithExactly('rootOn', true);
+        expect(spyForBroadcast).not.to.have.been.called;
+      });
+&nbsp;
+      it('should emit to only the intended event', function () {
+        expect(channelEmitter.SubA.SubA.emit('rootOn', true)).to.be.true;
+&nbsp;
+        expect(spyRootOn).to.have.been.calledOnce;
+        expect(spyRootOn).to.have.been.calledWithExactly(true);
+&nbsp;
+        expect(spyForSubA).not.to.have.been.called;
+        expect(spyForSubB).not.to.have.been.called;
+        expect(spyForSubASubA).not.to.have.been.called;
+      });
+&nbsp;
+      it('should not emit to non-direct ancestor channels', function () {
+        expect(channelEmitter.SubA.SubA.emit('rootOn', true)).to.be.true;
+        expect(spyForSubBEmit).not.to.have.been.called;
+        expect(spyForSubBBroadcast).not.to.have.been.called;
+      });
+&nbsp;
+      it('should not emit to descendent channels', function () {
+        expect(channelEmitter.emit('subAsubA', true)).to.be.false;
+        expect(spyForSubAEmit).not.to.have.been.called;
+        expect(spyForSubASubAEmit).not.to.have.been.called;
+&nbsp;
+        expect(spyForSubABroadcast).not.to.have.been.called;
+        expect(spyForSubASubABroadcast).not.to.have.been.called;
+      });
+&nbsp;
+      it('should broadcast to all descendent channels', function () {
+        expect(channelEmitter.broadcast('subAsubA', true)).to.be.true;
+        expect(spyForSubABroadcast).to.have.been.calledOnce;
+        expect(spyForSubABroadcast).to.have.been.calledWithExactly('subAsubA', true);
+        expect(spyForSubAEmit).not.to.have.been.called;
+&nbsp;
+        expect(spyForSubBBroadcast).to.have.been.calledOnce;
+        expect(spyForSubBBroadcast).to.have.been.calledWithExactly('subAsubA', true);
+        expect(spyForSubBEmit).not.to.have.been.called;
+&nbsp;
+        expect(spyForSubASubABroadcast).to.have.been.calledOnce;
+        expect(spyForSubASubABroadcast).to.have.been.calledWithExactly('subAsubA', true);
+        expect(spyForSubASubAEmit).not.to.have.been.called;
+      });
+&nbsp;
+      it('should broadcast to only the intended event', function () {
+        expect(channelEmitter.broadcast('subAsubA', true)).to.be.true;
+&nbsp;
+        expect(spyForSubASubA).to.have.been.calledOnce;
+        expect(spyForSubASubA).to.have.been.calledWithExactly(true);
+&nbsp;
+        expect(spyRootOn).not.to.have.been.called;
+        expect(spyForSubA).not.to.have.been.called;
+        expect(spyForSubB).not.to.have.been.called;
+      });
+&nbsp;
+      it('should not broadcast to ancestor channels', function () {
+        expect(channelEmitter.SubA.SubA.broadcast('rootOn', true)).to.be.false;
+        expect(spyForEmit).not.to.have.been.called;
+        expect(spyForSubAEmit).not.to.have.been.called;
+&nbsp;
+        expect(spyForBroadcast).not.to.have.been.called;
+        expect(spyForSubABroadcast).not.to.have.been.called;
+      });
+    });
+&nbsp;
+    describe('with name-spacing (shorthand for channels)', function () {
+      var spyForNSubANSubA;
+      var spyForNSubAEmit;
+      var spyForNSubABroadcast;
+      var spyForNSubANSubAEmit;
+      var spyForNSubANSubABroadcast;
+&nbsp;
+      before(function () {
+        spyForNSubANSubA = sinon.spy();
+        channelEmitter.on('NSubA.NSubA.nsubAnsubA', spyForNSubANSubA);
+&nbsp;
+        expect(channelEmitter).to.have.property('NSubA').that.is.an.instanceof(EventEmitter);
+        expect(channelEmitter.NSubA).to.have.property('NSubA').that.is.an.instanceof(EventEmitter);
+        expect(channelEmitter.NSubA.NSubA.listenerCount('nsubAnsubA')).to.equal(1);
+&nbsp;
+        spyForNSubAEmit = sinon.spy(channelEmitter.NSubA, 'emit');
+        spyForNSubABroadcast = sinon.spy(channelEmitter.NSubA, 'broadcast');
+        spyForNSubANSubAEmit = sinon.spy(channelEmitter.NSubA.NSubA, 'emit');
+        spyForNSubANSubABroadcast = sinon.spy(channelEmitter.NSubA.NSubA, 'broadcast');
+      });
+&nbsp;
+      afterEach(function () {
+        spyForNSubANSubA.reset();
+        spyForNSubAEmit.reset();
+        spyForNSubABroadcast.reset();
+        spyForNSubANSubAEmit.reset();
+        spyForNSubANSubABroadcast.reset();
+      });
+&nbsp;
+      it('should count listeners for the intended event', function () {
+        expect(channelEmitter.listenerCount('NSubA.NSubA.nsubAnsubA')).to.equal(1);
+      });
+&nbsp;
+      it('should return 0 without an event name', function () {
+        expect(channelEmitter.listenerCount('NSubA.NSubA')).to.equal(0);
+      });
+&nbsp;
+      it('should return 0 from a non-existent event', function () {
+        expect(channelEmitter.listenerCount('NSubA.NSubA.nsubB')).to.equal(0);
+      });
+&nbsp;
+      it('should return 0 from a non-existent channel', function () {
+        expect(channelEmitter.listenerCount('NSubA.NSubB.nsubAnsubA')).to.equal(0);
+      });
+&nbsp;
+      it('should return listeners from the intended event', function () {
+        expect(channelEmitter.listeners('NSubA.NSubA.nsubAnsubA')).to.deep.equal([spyForNSubANSubA]);
+      });
+&nbsp;
+      it('should return an empty array without an event name', function () {
+        expect(channelEmitter.listeners('NSubA.NSubA')).to.be.an('array');
+        expect(channelEmitter.listeners('NSubA.NSubA')).to.be.empty;
+      });
+&nbsp;
+      it('should return an empty array from a non-existent event', function () {
+        expect(channelEmitter.listeners('NSubA.NSubA.nsubB')).to.be.an('array');
+        expect(channelEmitter.listeners('NSubA.NSubA.nsubB')).to.be.empty;
+      });
+&nbsp;
+      it('should return an empty array from a non-existent channel', function () {
+        expect(channelEmitter.listeners('NSubA.NSubB.nsubAnsubA')).to.be.an('array');
+        expect(channelEmitter.listeners('NSubA.NSubB.nsubAnsubA')).to.be.empty;
+      });
+&nbsp;
+      it('should remove all listeners from a channel', function () {
+        var spy = sinon.spy();
+&nbsp;
+        channelEmitter.on('removeMe.foo', spy);
+        channelEmitter.on('removeMe.foo', spy);
+        channelEmitter.on('removeMe.bar', spy);
+&nbsp;
+        expect(channelEmitter.listenerCount('removeMe.foo')).to.equal(2);
+        expect(channelEmitter.listenerCount('removeMe.bar')).to.equal(1);
+&nbsp;
+        expect(channelEmitter.removeAllListeners('removeMe.bar')).to.be.an.instanceof(EventEmitter);
+&nbsp;
+        expect(channelEmitter.listenerCount('removeMe.foo')).to.equal(2);
+        expect(channelEmitter.listenerCount('removeMe.bar')).to.equal(0);
+&nbsp;
+        expect(channelEmitter.removeAllListeners('removeMe')).to.be.an.instanceof(EventEmitter);
+&nbsp;
+        expect(channelEmitter.listenerCount('removeMe.foo')).to.equal(0);
+        expect(channelEmitter.listenerCount('removeMe.bar')).to.equal(0);
+&nbsp;
+        channelEmitter.emit('removeMe.foo', true);
+        expect(spy).not.to.have.been.called;
+&nbsp;
+        // Cleanup
+        channelEmitter.removeChannel('removeMe');
+      });
+&nbsp;
+      it('should return the channel even if channel/event does not exist', function () {
+        expect(channelEmitter.removeAllListeners('removeMe.bar')).to.be.an.instanceof(EventEmitter);
+      });
+&nbsp;
+      it('should emit to the intended event', function () {
+        expect(channelEmitter.NSubA.NSubA.emit('nsubAnsubA', true)).to.be.true;
+&nbsp;
+        expect(spyForEmit).to.have.been.calledOnce;
+        expect(spyForEmit).to.have.been.calledWithExactly('nsubAnsubA', true);
+        expect(spyForNSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForNSubAEmit).to.have.been.calledOnce;
+        expect(spyForNSubAEmit).to.have.been.calledWithExactly('nsubAnsubA', true);
+        expect(spyForNSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForNSubANSubAEmit).to.have.been.calledOnce;
+        expect(spyForNSubANSubAEmit).to.have.been.calledWithExactly('nsubAnsubA', true);
+        expect(spyForNSubANSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForNSubANSubA).to.have.been.calledOnce;
+        expect(spyForNSubANSubA).to.have.been.calledWithExactly(true);
+      });
+&nbsp;
+      it('should emit to the intended event from the name-spaced channel', function () {
+        expect(channelEmitter.emit('NSubA.NSubA.nsubAnsubA', true)).to.be.true;
+&nbsp;
+        // The spy records the initial emit from above (which is redicted to the
+        //  intended channel)
+        expect(spyForEmit).to.have.been.calledTwice;
+        expect(spyForEmit.firstCall).to.have.been.calledWithExactly('NSubA.NSubA.nsubAnsubA', true);
+        // This is the emit that bubbled up from the redirected emit
+        expect(spyForEmit.secondCall).to.have.been.calledWithExactly('nsubAnsubA', true);
+        expect(spyForNSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForNSubAEmit).to.have.been.calledOnce;
+        expect(spyForNSubAEmit).to.have.been.calledWithExactly('nsubAnsubA', true);
+        expect(spyForNSubABroadcast).not.to.have.been.called;
+&nbsp;
+        // The spy records this call as the initial emit recorded above but redirected
+        //  to this channel
+        expect(spyForNSubANSubAEmit).not.to.have.been.called;
+        expect(spyForNSubANSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForNSubANSubA).to.have.been.calledOnce;
+        expect(spyForNSubANSubA).to.have.been.calledWithExactly(true);
+      });
+&nbsp;
+      it('should broadcast to the intended event', function () {
+        expect(channelEmitter.broadcast('nsubAnsubA', true)).to.be.true;
+&nbsp;
+        expect(spyForEmit).not.to.have.been.called;
+        expect(spyForBroadcast).to.have.been.calledOnce;
+        expect(spyForBroadcast).to.have.been.calledWithExactly('nsubAnsubA', true);
+&nbsp;
+        expect(spyForNSubAEmit).not.to.have.been.called;
+        expect(spyForNSubABroadcast).to.have.been.calledOnce;
+        expect(spyForNSubABroadcast).to.have.been.calledWithExactly('nsubAnsubA', true);
+&nbsp;
+        expect(spyForNSubANSubAEmit).not.to.have.been.called;
+        expect(spyForNSubANSubABroadcast).to.have.been.calledOnce;
+        expect(spyForNSubANSubABroadcast).to.have.been.calledWithExactly('nsubAnsubA', true);
+&nbsp;
+        expect(spyForNSubANSubA).to.have.been.calledOnce;
+        expect(spyForNSubANSubA).to.have.been.calledWithExactly(true);
+      });
+&nbsp;
+      it('should not emit to/from non-existent channels', function () {
+        expect(channelEmitter.emit('foo.rootOn', true)).to.be.false;
+        expect(spyRootOn).not.to.have.been.called;
+      });
+&nbsp;
+      it('should broadcast to the intended event from the name-spaced channel', function () {
+        channelEmitter.broadcast('NSubA.NSubA.nsubAnsubA', true);
+        //expect(channelEmitter.broadcast('NSubA.NSubA.nsubAnsubA', true)).to.be.true;
+&nbsp;
+        expect(spyForEmit).not.to.have.been.called;
+        // The spy records the initial broadcast from above (which is redicted to the
+        //  intended channel)
+        expect(spyForBroadcast).to.have.been.calledOnce;
+        expect(spyForBroadcast).to.have.been.calledWithExactly('NSubA.NSubA.nsubAnsubA', true);
+&nbsp;
+        expect(spyForNSubAEmit).not.to.have.been.called;
+        expect(spyForNSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForNSubANSubAEmit).not.to.have.been.called;
+        // The spy records this call as the initial broadcast recorded above but redirected
+        //  to this channel
+        expect(spyForNSubANSubABroadcast).not.to.have.been.called;
+&nbsp;
+        expect(spyForNSubANSubA).to.have.been.calledOnce;
+        expect(spyForNSubANSubA).to.have.been.calledWithExactly(true);
+      });
+&nbsp;
+      it('should not broadcast to/from non-existent channels', function () {
+        expect(channelEmitter.broadcast('foo.rootOn', true)).to.be.false;
+      });
+&nbsp;
+      describe('with relative names (default)', function () {
+        var spyForNSubANSubB;
+&nbsp;
+        before(function () {
+          spyForNSubANSubB = sinon.spy();
+        });
+&nbsp;
+        it('should add a listener relative to the current channel', function () {
+          channelEmitter.NSubA.addListener('NSubB.nsubAnsubB', spyForNSubANSubB);
+&nbsp;
+          expect(channelEmitter.NSubA).to.have.property('NSubB').that.is.an.instanceof(EventEmitter);
+          expect(channelEmitter.NSubA.NSubB.listenerCount('nsubAnsubB')).to.equal(1);
+        });
+&nbsp;
+        it('should remove a listener relative to the current channel', function () {
+          channelEmitter.NSubA.removeListener('NSubB.nsubAnsubB', spyForNSubANSubB);
+&nbsp;
+          expect(channelEmitter.NSubA).to.have.property('NSubB').that.is.an.instanceof(EventEmitter);
+          expect(channelEmitter.NSubA.NSubB.listenerCount('nsubAnsubB')).to.equal(0);
+        });
+      });
+&nbsp;
+      describe('with absolute names (starts with "^")', function () {
+        var spyForNSubB;
+&nbsp;
+        before(function () {
+          spyForNSubB = sinon.spy();
+        });
+&nbsp;
+        it('should add a listener relative to the current channel', function () {
+          channelEmitter.NSubA.addListener('^NSubB.nsubB', spyForNSubB);
+&nbsp;
+          expect(channelEmitter).to.have.property('NSubB').that.is.an.instanceof(EventEmitter);
+          expect(channelEmitter.NSubB.listenerCount('nsubB')).to.equal(1);
+        });
+&nbsp;
+        it('should remove a listener relative to the current channel', function () {
+          channelEmitter.NSubA.removeListener('^NSubB.nsubB', spyForNSubB);
+&nbsp;
+          expect(channelEmitter).to.have.property('NSubB').that.is.an.instanceof(EventEmitter);
+          expect(channelEmitter.NSubB.listenerCount('nsubB')).to.equal(0);
+        });
+      });
+    });
+  });
+});
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat May 28 2016 11:58:57 GMT-0400 (EDT)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
