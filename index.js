@@ -21,6 +21,14 @@ util.inherits(ChannelEmitter, EventEmitter);
 // Override built-in methods
 ChannelEmitter.prototype._addListener = ChannelEmitter.prototype.addListener;
 ChannelEmitter.prototype.addListener = addListener;
+ChannelEmitter.prototype._removeListener = ChannelEmitter.prototype.removeListener;
+ChannelEmitter.prototype.removeListener = removeListener;
+ChannelEmitter.prototype._removeAllListeners = ChannelEmitter.prototype.removeAllListeners;
+ChannelEmitter.prototype.removeAllListeners = removeAllListeners;
+ChannelEmitter.prototype._listenerCount = ChannelEmitter.prototype.listenerCount;
+ChannelEmitter.prototype.listenerCount = listenerCount;
+ChannelEmitter.prototype._listeners = ChannelEmitter.prototype.listeners;
+ChannelEmitter.prototype.listeners = listeners;
 ChannelEmitter.prototype._on = ChannelEmitter.prototype.on;
 ChannelEmitter.prototype.on = on;
 ChannelEmitter.prototype._emit = ChannelEmitter.prototype.emit;
@@ -46,8 +54,8 @@ function addListener(eventName, listener) {
 
 /**
 * @function removeListener
-* @desc Wrapper for the `EventEmitter.removeListener` method that will auto-remove channels
-*  if the specified delimiter is used in the name.
+* @desc Wrapper for the `EventEmitter.removeListener` method that will remove
+*  events from a specified channl if the specified delimiter is used in the name.
 * @param {string} eventName - the name for the event
 * @param {function} listener - the listener for the event
 * @return {ChannelEmitter}
@@ -60,6 +68,57 @@ function removeListener(eventName, listener) {
   }
 
   return this;
+}
+
+/**
+* @function removeAllListeners
+* @desc Wrapper for the `EventEmitter.removeAllListeners` method that will remove
+*  if the specified delimiter is used in the name.
+* @param {string} [eventName] - the name for the event
+* @return {ChannelEmitter}
+*/
+function removeAllListeners(eventName) {
+  var channelAndEventName = getChannelAndEventName(this, eventName);
+
+  if (channelAndEventName.channel) {
+    if (channelAndEventName.eventName) {
+      channelAndEventName.channel._removeAllListeners(channelAndEventName.eventName);
+    } else {
+      channelAndEventName.channel._removeAllListeners();
+    }
+  }
+
+  return this;
+}
+
+/**
+* @function listenerCount
+* @desc Wrapper for the `EventEmitter.listenerCount` method that will return the
+*  listener count on a channel (including name-spaced events).
+* @param {string} eventName - the name for the event
+* @return {ChannelEmitter}
+*/
+function listenerCount(eventName) {
+  var channelAndEventName = getChannelAndEventName(this, eventName);
+
+  return channelAndEventName.channel ?
+    channelAndEventName.channel._listenerCount(channelAndEventName.eventName) :
+    0;
+}
+
+/**
+* @function listeners
+* @desc Wrapper for the `EventEmitter.listeners` method that will return the
+*  listeners on a channel (including name-spaced events).
+* @param {string} eventName - the name for the event
+* @return {ChannelEmitter}
+*/
+function listeners(eventName) {
+  var channelAndEventName = getChannelAndEventName(this, eventName);
+
+  return channelAndEventName.channel ?
+    channelAndEventName.channel._listeners(channelAndEventName.eventName) :
+    [];
 }
 
 /**
@@ -187,9 +246,19 @@ function addChannelsFromEventName(curChannel, eventName) {
 }
 
 function getChannelAndEventName(curChannel, eventName) {
-  return processChannelsFromEventName(curChannel, eventName, function (cur, channel) {
+  var channelAndEventName = processChannelsFromEventName(curChannel, eventName, function (cur, channel) {
     return cur && cur[channel];
   });
+  var isChannel = channelAndEventName.channel && channelAndEventName.channel._channels.indexOf(channelAndEventName.eventName) > -1;
+
+  // If eventName doesn't include an event name (only name-spaced channels);
+  if (isChannel) {
+    channelAndEventName.channel = channelAndEventName.channel[channelAndEventName.eventName];
+
+    channelAndEventName.eventName = undefined;
+  }
+
+  return channelAndEventName;
 }
 
 function processChannelsFromEventName(curChannel, eventName, reduceFn) {
@@ -220,12 +289,4 @@ function onOrAddListener(channel, method, eventName, listener) {
   channelAndEventName.channel[method](channelAndEventName.eventName, listener);
 
   return channel;
-}
-
-function removeIfChannelEmpty(channel) {
-  var parent = channel._parent;
-
-  if (parent && channel.listenerCount === 0 && channel._channels.length === 0) {
-    return parent.removeChannel();
-  }
 }
