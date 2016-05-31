@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "An event emitter with channel and broadcast support",
   "main": "index.js",
+  "engines" : { "node" : ">=4" },
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.4.0",
