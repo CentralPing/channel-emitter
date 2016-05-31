@@ -10,19 +10,81 @@ channel-emitter
 
 `npm i --save channel-emitter`
 
+## What is ChannelEmitter?
+  * **A "singleton" EventEmitter** - at its core it is a pseudo-singleton (it relies on the node module cache) [EventEmitter](https://nodejs.org/api/events.html). Every module within a process that requires ChannelEmitter will recieve the same cached object.
+  * **A multi-channel emitter** - ChannelEmitter supports channels as well as sub-channels. This allows listeners for an event on specific channels as well as emitting up to parent channels and broadcasting down to sub-channels.
+
+## Features
+  * Provides a "singleton" (a node module cached object).
+  * Allows name-spacing of events through "channels".
+  * Every channel can have multiple sub-channels.
+  * A channel can emit to all events on the channel as well as up to all parent channels.
+  * A channel can broadcast to all events on the channel as well as down to all sub-channels.
+
+## Examples
+
+### Basic Usage
+#### As a singleton
+```js
+/* a.js */
+var channelEmitter = require('channel-emitter');
+channelEmitter.on('foo', function () { console.log(arguments); });
+
+/* b.js */
+var channelEmitter = require('channel-emitter');
+channelEmitter.emit('foo', true, {foo: []}, 123);
+
+/* c.js */
+require('./a');
+require('./b');
+// outputs: { '0': true, '1': { foo: [] }, '2': 123 }
+```
+
+#### With channels
+```js
+/* a.js */
+var channelEmitter = require('channel-emitter');
+channelEmitter.on('foobar', function () { console.log('foobar: ', arguments); });
+channelEmitter.on('foo.bar', function () { console.log('foo.bar: ', arguments); });
+
+channelEmitter.emit('foobar', 'hi');
+// returns true;
+// outputs: foobar: { 0: 'hi' }
+
+channelEmitter.emit('bar', 'hello');
+// returns false;
+// outputs:
+
+channelEmitter.emit('foo.foobar', 'hi');
+// returns true;
+// outputs: foobar: { 0: 'hi' }
+
+channelEmitter.emit('foo.bar', 'hello');
+// returns true;
+// outputs: foo.bar: { 0: 'hello' }
+
+channelEmitter.broadcast('foobar', 'hi');
+// returns true;
+// outputs: foobar: { 0: 'hi' }
+
+channelEmitter.broadcast('bar', 'hello');
+// returns true;
+// outputs: foo.bar: { 0: 'hello' }
+
+channelEmitter.broadcast('foo.foobar', 'hi');
+// returns false;
+// outputs:
+
+channelEmitter.broadcast('foo.bar', 'hello');
+// returns true;
+// outputs: foo.bar: { 0: 'hello' }
+```
+
 ## API Reference
 {{#module name="channel-emitter"~}}
 {{>body~}}
 {{>members~}}
 {{/module}}
-
-## Examples
-
-### With Strings
-```js
-var channelEmitter = require('channel-emitter');
-
-```
 
 # License
 

@@ -10,6 +10,76 @@ channel-emitter
 
 `npm i --save channel-emitter`
 
+## What is ChannelEmitter?
+  * **A "singleton" EventEmitter** - at its core it is a pseudo-singleton (it relies on the node module cache) [EventEmitter](https://nodejs.org/api/events.html). Every module within a process that requires ChannelEmitter will recieve the same cached object.
+  * **A multi-channel emitter** - ChannelEmitter supports channels as well as sub-channels. This allows listeners for an event on specific channels as well as emitting up to parent channels and broadcasting down to sub-channels.
+
+## Features
+  * Provides a "singleton" (a node module cached object).
+  * Allows name-spacing of events through "channels".
+  * Every channel can have multiple sub-channels.
+  * A channel can emit to all events on the channel as well as up to all parent channels.
+  * A channel can broadcast to all events on the channel as well as down to all sub-channels.
+
+## Examples
+
+### Basic Usage
+#### As a singleton
+```js
+/* a.js */
+var channelEmitter = require('channel-emitter');
+channelEmitter.on('foo', function () { console.log(arguments); });
+
+/* b.js */
+var channelEmitter = require('channel-emitter');
+channelEmitter.emit('foo', true, {foo: []}, 123);
+
+/* c.js */
+require('./a');
+require('./b');
+// outputs: { '0': true, '1': { foo: [] }, '2': 123 }
+```
+
+#### With channels
+```js
+/* a.js */
+var channelEmitter = require('channel-emitter');
+channelEmitter.on('foobar', function () { console.log('foobar: ', arguments); });
+channelEmitter.on('foo.bar', function () { console.log('foo.bar: ', arguments); });
+
+channelEmitter.emit('foobar', 'hi');
+// returns true;
+// outputs: foobar: { 0: 'hi' }
+
+channelEmitter.emit('bar', 'hello');
+// returns false;
+// outputs:
+
+channelEmitter.emit('foo.foobar', 'hi');
+// returns true;
+// outputs: foobar: { 0: 'hi' }
+
+channelEmitter.emit('foo.bar', 'hello');
+// returns true;
+// outputs: foo.bar: { 0: 'hello' }
+
+channelEmitter.broadcast('foobar', 'hi');
+// returns true;
+// outputs: foobar: { 0: 'hi' }
+
+channelEmitter.broadcast('bar', 'hello');
+// returns true;
+// outputs: foo.bar: { 0: 'hello' }
+
+channelEmitter.broadcast('foo.foobar', 'hi');
+// returns false;
+// outputs:
+
+channelEmitter.broadcast('foo.bar', 'hello');
+// returns true;
+// outputs: foo.bar: { 0: 'hello' }
+```
+
 ## API Reference
 **Example**  
 ```js
@@ -31,8 +101,8 @@ Wrapper for the `EventEmitter.addListener` method that will auto-add channels
 <a name="module_channel-emitter..removeListener"></a>
 
 ### channel-emitter~removeListener(eventName, listener) ⇒ <code>ChannelEmitter</code>
-Wrapper for the `EventEmitter.removeListener` method that will auto-remove channels
- if the specified delimiter is used in the name.
+Wrapper for the `EventEmitter.removeListener` method that will remove
+ events from a specified channl if the specified delimiter is used in the name.
 
 **Kind**: inner method of <code>[channel-emitter](#module_channel-emitter)</code>  
 
@@ -40,6 +110,42 @@ Wrapper for the `EventEmitter.removeListener` method that will auto-remove chann
 | --- | --- | --- |
 | eventName | <code>string</code> | the name for the event |
 | listener | <code>function</code> | the listener for the event |
+
+<a name="module_channel-emitter..removeAllListeners"></a>
+
+### channel-emitter~removeAllListeners([eventName]) ⇒ <code>ChannelEmitter</code>
+Wrapper for the `EventEmitter.removeAllListeners` method that will remove
+ if the specified delimiter is used in the name.
+
+**Kind**: inner method of <code>[channel-emitter](#module_channel-emitter)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [eventName] | <code>string</code> | the name for the event |
+
+<a name="module_channel-emitter..listenerCount"></a>
+
+### channel-emitter~listenerCount(eventName) ⇒ <code>ChannelEmitter</code>
+Wrapper for the `EventEmitter.listenerCount` method that will return the
+ listener count on a channel (including name-spaced events).
+
+**Kind**: inner method of <code>[channel-emitter](#module_channel-emitter)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| eventName | <code>string</code> | the name for the event |
+
+<a name="module_channel-emitter..listeners"></a>
+
+### channel-emitter~listeners(eventName) ⇒ <code>ChannelEmitter</code>
+Wrapper for the `EventEmitter.listeners` method that will return the
+ listeners on a channel (including name-spaced events).
+
+**Kind**: inner method of <code>[channel-emitter](#module_channel-emitter)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| eventName | <code>string</code> | the name for the event |
 
 <a name="module_channel-emitter..on"></a>
 
@@ -78,7 +184,7 @@ Removes the sub-channel from the current channel.
 
 <a name="module_channel-emitter..emit"></a>
 
-### channel-emitter~emit(eventName, arguments) ⇒ <code>Boolean</code>
+### channel-emitter~emit(eventName, [...args]) ⇒ <code>Boolean</code>
 EventEmitter wrapper that emits an event to siblings and direct ancestor
  channels.
 
@@ -87,28 +193,20 @@ EventEmitter wrapper that emits an event to siblings and direct ancestor
 | Param | Type | Description |
 | --- | --- | --- |
 | eventName | <code>string</code> | the name for the registered event |
-| arguments | <code>arguments</code> | arguments to emit to the event |
+| [...args] | <code>\*</code> | arguments to emit to the event |
 
 <a name="module_channel-emitter..broadcast"></a>
 
-### channel-emitter~broadcast(eventName, arguments) ⇒ <code>Boolean</code>
-Emits an event to siblings and descendent channels.
+### channel-emitter~broadcast(eventName, [...args]) ⇒ <code>Boolean</code>
+Broadcasts an event to siblings and descendent channels.
 
 **Kind**: inner method of <code>[channel-emitter](#module_channel-emitter)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | eventName | <code>string</code> | the name for the registered event |
-| arguments | <code>arguments</code> | arguments to emit to the event |
+| [...args] | <code>\*</code> | arguments to broadcast to the event |
 
-
-## Examples
-
-### With Strings
-```js
-var channelEmitter = require('channel-emitter');
-
-```
 
 # License
 

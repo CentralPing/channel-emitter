@@ -170,7 +170,7 @@ function removeChannel(channelName) {
 * @desc EventEmitter wrapper that emits an event to siblings and direct ancestor
 *  channels.
 * @param {string} eventName - the name for the registered event
-* @param {arguments} arguments - arguments to emit to the event
+* @param {...*} [args] - arguments to emit to the event
 * @return {Boolean}
 */
 function emit() {
@@ -192,9 +192,9 @@ function emit() {
 
 /**
 * @function broadcast
-* @desc Emits an event to siblings and descendent channels.
+* @desc Broadcasts an event to siblings and descendent channels.
 * @param {string} eventName - the name for the registered event
-* @param {arguments} arguments - arguments to emit to the event
+* @param {...*} [args] - arguments to broadcast to the event
 * @return {Boolean}
 */
 function broadcast() {
