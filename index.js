@@ -33,6 +33,19 @@ ChannelEmitter.prototype._on = ChannelEmitter.prototype.on;
 ChannelEmitter.prototype.on = on;
 ChannelEmitter.prototype._emit = ChannelEmitter.prototype.emit;
 ChannelEmitter.prototype.emit = emit;
+
+// Add Node 6x methods
+/*
+if (ChannelEmitter.prototype.) {
+  ChannelEmitter.prototype._ = ChannelEmitter.prototype.;
+  ChannelEmitter.prototype. = ;
+}
+*/
+if (ChannelEmitter.prototype.eventNames) {
+  ChannelEmitter.prototype._eventNames = ChannelEmitter.prototype.eventNames;
+  ChannelEmitter.prototype.eventNames = eventNames;
+}
+
 // Add extension methods
 ChannelEmitter.prototype.broadcast = broadcast;
 ChannelEmitter.prototype.addChannel = addChannel;
@@ -118,6 +131,21 @@ function listeners(eventName) {
 
   return channelAndEventName.channel ?
     channelAndEventName.channel._listeners(channelAndEventName.eventName) :
+    [];
+}
+
+/**
+* @function eventNames
+* @desc Wrapper for the `EventEmitter.eventNames` method that will return the
+*  events registered on a channel.
+* @param {string} eventName - the name for the event
+* @return {[String]}
+*/
+function eventNames(eventName) {
+  var channelAndEventName = getChannelAndEventName(this, eventName);
+
+  return channelAndEventName.channel ?
+    channelAndEventName.channel._eventNames(channelAndEventName.eventName) :
     [];
 }
 

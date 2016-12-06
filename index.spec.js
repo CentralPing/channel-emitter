@@ -70,6 +70,14 @@ describe('Module: channel-emitter', function () {
       spyForBroadcast.reset();
     });
 
+    if (channelEmitter.eventNames) {
+      describe('with `eventNames`', function () {
+        it('should list all the event names registered on the current channel', function () {
+          expect(channelEmitter.eventNames()).to.have.all.members(['rootOn', 'rootAddListner']);
+        });
+      });
+    }
+
     describe('with `on`', function () {
       it('should emit on the current channel', function () {
         expect(channelEmitter.emit('rootOn', true)).to.be.true;
@@ -322,6 +330,14 @@ describe('Module: channel-emitter', function () {
         expect(spyForBroadcast).not.to.have.been.called;
         expect(spyForSubABroadcast).not.to.have.been.called;
       });
+
+      if (channelEmitter.eventNames) {
+        it('should list all the event names registered on the current channel', function () {
+          expect(channelEmitter.SubA.eventNames()).to.have.all.members(['subA']);
+          expect(channelEmitter.SubB.eventNames()).to.have.all.members(['subB']);
+          expect(channelEmitter.SubA.SubA.eventNames()).to.have.all.members(['subAsubA']);
+        });
+      }
     });
 
     describe('with name-spacing (shorthand for channels)', function () {
@@ -512,6 +528,12 @@ describe('Module: channel-emitter', function () {
         expect(channelEmitter.broadcast('foo.rootOn', true)).to.be.false;
       });
 
+      if (channelEmitter.eventNames) {
+        it('should list all the event names registered on the specified channel', function () {
+          expect(channelEmitter.eventNames('NSubA.NSubA')).to.have.all.members(['nsubAnsubA']);
+        });
+      }
+
       describe('with relative names (default)', function () {
         var spyForNSubANSubB;
 
@@ -532,6 +554,12 @@ describe('Module: channel-emitter', function () {
           expect(channelEmitter.NSubA).to.have.property('NSubB').that.is.an.instanceof(EventEmitter);
           expect(channelEmitter.NSubA.NSubB.listenerCount('nsubAnsubB')).to.equal(0);
         });
+
+        if (channelEmitter.eventNames) {
+          it('should list all the event names registered on the relative to the current channel', function () {
+            expect(channelEmitter.NSubA.eventNames('NSubA')).to.have.all.members(['nsubAnsubA']);
+          });
+        }
       });
 
       describe('with absolute names (starts with "^")', function () {
@@ -541,19 +569,25 @@ describe('Module: channel-emitter', function () {
           spyForNSubB = sinon.spy();
         });
 
-        it('should add a listener relative to the current channel', function () {
+        it('should add a listener to the specified channel', function () {
           channelEmitter.NSubA.addListener('^NSubB.nsubB', spyForNSubB);
 
           expect(channelEmitter).to.have.property('NSubB').that.is.an.instanceof(EventEmitter);
           expect(channelEmitter.NSubB.listenerCount('nsubB')).to.equal(1);
         });
 
-        it('should remove a listener relative to the current channel', function () {
+        it('should remove a listener from the specified channel', function () {
           channelEmitter.NSubA.removeListener('^NSubB.nsubB', spyForNSubB);
 
           expect(channelEmitter).to.have.property('NSubB').that.is.an.instanceof(EventEmitter);
           expect(channelEmitter.NSubB.listenerCount('nsubB')).to.equal(0);
         });
+
+        if (channelEmitter.eventNames) {
+          it('should list all the event names registered on the specified channel', function () {
+            expect(channelEmitter.NSubB.eventNames('^NSubA.NSubA')).to.have.all.members(['nsubAnsubA']);
+          });
+        }
       });
     });
   });
