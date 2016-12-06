@@ -54,7 +54,7 @@ gulp.task('test', ['lint'], function () {
 });
 
 gulp.task('pre-coverage', function () {
-  return gulp.src(cliSrc || config.paths.all)
+  return gulp.src(cliSrc || config.paths.scripts)
   // Covering files
   .pipe(istanbul())
   // Force `require` to return covered files
