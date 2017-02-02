@@ -1,6 +1,8 @@
 channel-emitter
 ====================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/CentralPing/channel-emitter.svg)](https://greenkeeper.io/)
+
 [![Codeship Status for CentralPing/channel-emitter](https://codeship.com/projects/ec09ced0-ff30-0133-c4c4-0e8044b6a985/status)](https://codeship.com/projects/152745)
 [![Build Status](https://travis-ci.org/CentralPing/channel-emitter.svg?branch=master)](https://travis-ci.org/CentralPing/channel-emitter)
 [![Code Climate for CentralPing/channel-emitter](https://codeclimate.com/github/CentralPing/channel-emitter/badges/gpa.svg)](https://codeclimate.com/github/CentralPing/channel-emitter)
