@@ -23,7 +23,7 @@
     "jshint": "^2.9.4",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
-    "yargs": "^6.5.0"
+    "yargs": "^8.0.1"
   },
   "scripts": {
     "test": "gulp test",
