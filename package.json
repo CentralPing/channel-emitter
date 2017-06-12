@@ -21,7 +21,7 @@
     "gulp-todo": "^5.1.0",
     "gulp-util": "^3.0.7",
     "jshint": "^2.9.4",
-    "sinon": "^1.17.6",
+    "sinon": "^2.0.0",
     "sinon-chai": "^2.8.0",
     "yargs": "^7.0.1"
   },
